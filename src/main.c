@@ -12,9 +12,11 @@ int main(int argc, char *argv[])
 	screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
 	running = true;
 
-	struct vec2i v1 = { 100, 100 };
-	struct vec2i v2 = { 50, 400 };
-	draw_line(screen, &v1, &v2, 0xff00aaff);
+	struct vec2i v1[2] = {{100, 100}, {50, 400}};
+	draw_line(screen, v1, 0xff00aaff);
+
+	struct vec2i v2[3] = {{320, 100}, {480, 50}, {160, 400}};
+	draw_triangle(screen, v2, 0xffffff00);
 
 	while (running) {
 		SDL_Event event;
