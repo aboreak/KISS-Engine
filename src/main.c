@@ -1,9 +1,43 @@
+#include <stdbool.h>
+#include <SDL/SDL.h>
+
+#include "software_renderer.h"
+
+int main(int argc, char *argv[])
+{
+	SDL_Surface *screen;
+	bool running;
+	
+	SDL_Init(SDL_INIT_EVERYTHING);
+	screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
+	running = true;
+
+	struct vec2i v1 = { 100, 100 };
+	struct vec2i v2 = { 50, 400 };
+	draw_line(screen, &v1, &v2, 0xff00aaff);
+
+	while (running) {
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_QUIT)
+				running = false;
+		}
+		SDL_Flip(screen);
+	}
+
+	SDL_Quit();
+
+	return 0;
+}
+
+/*
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "model.h"
 #include "program.h"
@@ -109,3 +143,4 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
+*/
