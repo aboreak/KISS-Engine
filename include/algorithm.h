@@ -18,4 +18,11 @@ static inline void swapf(float *a, float *b)
 	*b = tmp;
 }
 
+static inline void swapi(int *a, int *b)
+{
+	int tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
 #endif
