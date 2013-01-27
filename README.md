@@ -7,8 +7,10 @@ Authors:
 * Lilis Iskandar (veeableful)
 * Jacky Boen (jackyb)
 
+Ongoing plans:
+* Software renderer
+
 Future plans:
-- Software renderer
-- Support for OpenGL below version 2.1
-- Level editor
-- Multi-threading
+* Support for OpenGL below version 2.1
+* Level editor
+* Multi-threading
