@@ -1,7 +1,9 @@
 #include <stdbool.h>
+#include <stdio.h>
 #include <SDL/SDL.h>
 
 #include "software_renderer.h"
+#include "algorithm.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,21 +14,18 @@ int main(int argc, char *argv[])
 	renderer = renderer_new(640, 480);
 	running = true;
 
-	struct vec3 front[4] = { {-1, -1, -1}, {-0.5, -1, -1}, {-0.5, -0.5, -1},
-				 {-1, -0.5, -1} };
-	struct vec3 right[4] = { {-0.5, -1, -1}, {-0.5, -1, -1.5},
-				 {-0.5, -0.5, -1.5}, {-0.5, -0.5, -1} };
-	struct vec3 bottom[4] = { {-1, -0.5, -1}, {-0.5, -0.5, -1},
-				 {-0.5, -0.5, -1.5}, {-1, -0.5, -1.5} };
-	renderer_draw_rect3d(renderer, front, 0xff0000ff);
-	renderer_draw_rect3d(renderer, right, 0xffff00ff);
-	renderer_draw_rect3d(renderer, bottom, 0xff00ff00);
-	
 	while (running) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT)
 				running = false;
+			renderer_clear(renderer);
+			float x = event.motion.x;
+			float y = event.motion.y;
+			float mx = mapf(x, 0, 640, -1, 1);
+			float my = mapf(y, 0, 480, -1, 1);
+			struct vec3 v = {mx, my, -1};
+			renderer_draw_cube(renderer, v, 0.5, 0.5, 0.5);
 		}
 		renderer_display(renderer);
 	}

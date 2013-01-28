@@ -73,8 +73,8 @@ void draw_line(SDL_Surface *surface, struct vec2 v[2], unsigned int color)
 static void draw_triangle_span(SDL_Surface *surface, struct line *tall,
 			       struct line *shrt, unsigned int color)
 {
-	int tdx, tdy;
-	int sdx, sdy;
+	float tdx, tdy;
+	float sdx, sdy;
 	float tslope, sslope;
 
 	if (tall->v[0].y > tall->v[1].y)
@@ -85,15 +85,15 @@ static void draw_triangle_span(SDL_Surface *surface, struct line *tall,
 	tdy = tall->v[1].y - tall->v[0].y;
 	sdx = shrt->v[1].x - shrt->v[0].x;
 	sdy = shrt->v[1].y - shrt->v[0].y;
-	tslope = (float) tdx / tdy;
-	sslope = (float) sdx / sdy;
+	tslope =  tdx / tdy;
+	sslope =  sdx / sdy;
 
 	if (tall->v[0].x == shrt->v[0].x &&
 	    tall->v[0].y == shrt->v[0].y) {
-		for (int y = shrt->v[0].y; y < shrt->v[1].y; y++) {
-			int sx = shrt->v[0].x + sslope * (y - shrt->v[0].y);
-			int tx = tall->v[0].x + tslope * (y - tall->v[0].y);
-			int min, max;
+		for (float y = shrt->v[0].y; y <= shrt->v[1].y; y++) {
+			float sx = shrt->v[0].x + sslope * (y - shrt->v[0].y);
+			float tx = tall->v[0].x + tslope * (y - tall->v[0].y);
+			float min, max;
 			if (sx < tx) {
 				min = sx;
 				max = tx;
@@ -101,16 +101,16 @@ static void draw_triangle_span(SDL_Surface *surface, struct line *tall,
 				min = tx;
 				max = sx;
 			}
-			for (int x = min; x < max; x++) {
+			for (float x = min; x < max; x++) {
 				draw_pixel(surface, x, y, color);
 			}
 		}
 	} else if (tall->v[1].x == shrt->v[1].x &&
 		   tall->v[1].y == shrt->v[1].y) {
-		for (int y = shrt->v[1].y; y >= shrt->v[0].y; y--) {
-			int sx = shrt->v[0].x + sslope * (y - shrt->v[0].y);
-			int tx = tall->v[0].x + tslope * (y - tall->v[0].y);
-			int min, max;
+		for (float y = shrt->v[1].y; y >= shrt->v[0].y; y--) {
+			float sx = shrt->v[0].x + sslope * (y - shrt->v[0].y);
+			float tx = tall->v[0].x + tslope * (y - tall->v[0].y);
+			float min, max;
 			if (sx < tx) {
 				min = sx;
 				max = tx;
@@ -118,7 +118,7 @@ static void draw_triangle_span(SDL_Surface *surface, struct line *tall,
 				min = tx;
 				max = sx;
 			}
-			for (int x = min; x < max; x++) {
+			for (float x = min; x < max; x++) {
 				draw_pixel(surface, x, y, color);
 			}
 		}
@@ -172,12 +172,6 @@ void draw_rect(SDL_Surface *surface, struct vec2 v[4], unsigned int color)
 	draw_triangle(surface, v2, color);
 }
 
-void draw_line3d(SDL_Surface *surface, struct vec3 v[2], unsigned int color)
-{
-
-
-}
-
 /**
  * renderer_new - creates an initialized struct renderer
  * @width:	the width of the screen
@@ -212,6 +206,16 @@ struct renderer * renderer_new(int width, int height)
 void renderer_set_viewport(struct renderer *rndr, struct rect *viewport)
 {
 	rndr->viewport = *viewport;
+}
+
+/**
+ * renderer_clear - clear the screen
+ * @rndr:	the renderer
+ */
+void renderer_clear(struct renderer *rndr)
+{
+	int len = rndr->screen->w * rndr->screen->h * sizeof(unsigned int);
+	memset(rndr->screen->pixels, 0, len);
 }
 
 /**
@@ -364,4 +368,39 @@ void renderer_draw_rect3d(struct renderer *rndr, struct vec3 v[4],
 			      {v[3].x, v[3].y} };
 	map_rect_to_viewport(rndr, tv);
 	draw_rect(rndr->screen, tv, color);
+}
+
+void renderer_draw_cube(struct renderer *rndr, struct vec3 v, float w, float h,
+			float d)
+{
+	struct vec3 front[4]	= {{v.x,	v.y,		v.z},
+				   {v.x + w,	v.y,		v.z},
+				   {v.x + w,	v.y + h,	v.z},
+				   {v.x,	v.y + h,	v.z} };
+	struct vec3 back[4]	= {{v.x,	v.y,		v.z - d},
+				   {v.x + w,	v.y,		v.z - d},
+				   {v.x + w,	v.y + h,	v.z - d},
+				   {v.x,	v.y + h,	v.z - d}};
+	struct vec3 left[4]	= {{v.x,	v.y,		v.z - d},
+				   {v.x,	v.y,		v.z},
+				   {v.x,	v.y + h,	v.z},
+				   {v.x,	v.y + h,	v.z - d}};
+	struct vec3 right[4]	= {{v.x + w,	v.y,		v.z},
+				   {v.x + w,	v.y,		v.z - d},
+				   {v.x + w, 	v.y + h,	v.z - d},
+				   {v.x + w, 	v.y + h,	v.z}};
+	struct vec3 top[4]	= {{v.x,	v.y,		v.z},
+				   {v.x + w,	v.y,		v.z},
+				   {v.x + w, 	v.y,		v.z - d},
+				   {v.x,	v.y,		v.z - d}};
+	struct vec3 bottom[4]	= {{v.x,	v.y + h,	v.z},
+				   {v.x + w,	v.y + h,	v.z},
+				   {v.x + w, 	v.y + h,	v.z - d},
+				   {v.x,	v.y + h,	v.z - d}};
+	renderer_draw_rect3d(rndr, back, 0xff00ff00);
+	renderer_draw_rect3d(rndr, top, 0xffff00ff);
+	renderer_draw_rect3d(rndr, left, 0xff0000ff);
+	renderer_draw_rect3d(rndr, right, 0xffffff00);
+	renderer_draw_rect3d(rndr, bottom, 0xffff00ff);
+	renderer_draw_rect3d(rndr, front, 0xffff0000);
 }

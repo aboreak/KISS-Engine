@@ -38,6 +38,8 @@ struct renderer * renderer_new(int width, int height);
 
 void renderer_set_viewport(struct renderer *rndr, struct rect *viewport);
 
+void renderer_clear();
+
 void renderer_display();
 
 void renderer_draw_line(struct renderer *rndr, struct vec2 v[2],
@@ -56,5 +58,8 @@ void renderer_draw_triangle3d(struct renderer *rndr, struct vec3 v[3],
 
 void renderer_draw_rect3d(struct renderer *rndr, struct vec3 v[4],
 			unsigned int color);
+
+void renderer_draw_cube(struct renderer *rndr, struct vec3 v, float w, float h,
+			float d);
 
 #endif
