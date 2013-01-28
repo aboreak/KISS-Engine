@@ -5,18 +5,15 @@
 
 int main(int argc, char *argv[])
 {
-	SDL_Surface *screen;
+	struct renderer *renderer;
 	bool running;
 	
 	SDL_Init(SDL_INIT_EVERYTHING);
-	screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
+	renderer = renderer_new(640, 480);
 	running = true;
 
-	struct vec2i v1[2] = {{100, 100}, {50, 400}};
-	draw_line(screen, v1, 0xff00aaff);
-
-	struct vec2i v2[3] = {{320, 100}, {480, 50}, {160, 400}};
-	draw_triangle(screen, v2, 0xffffff00);
+	struct vec2 v1[2] = {{-1, 0}, {1, 0}};
+	renderer_draw_line(renderer, v1, 0xff00aaff);
 
 	while (running) {
 		SDL_Event event;
@@ -24,7 +21,7 @@ int main(int argc, char *argv[])
 			if (event.type == SDL_QUIT)
 				running = false;
 		}
-		SDL_Flip(screen);
+		renderer_display(renderer);
 	}
 
 	SDL_Quit();
