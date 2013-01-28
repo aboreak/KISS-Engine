@@ -12,9 +12,16 @@ int main(int argc, char *argv[])
 	renderer = renderer_new(640, 480);
 	running = true;
 
-	struct vec2 v[4] = { {-1, -1}, {1, -1}, {1, 1}, {-1, 1} };
-	renderer_draw_rect(renderer, v, 0xffffff00);
-
+	struct vec3 front[4] = { {-1, -1, -1}, {-0.5, -1, -1}, {-0.5, -0.5, -1},
+				 {-1, -0.5, -1} };
+	struct vec3 right[4] = { {-0.5, -1, -1}, {-0.5, -1, -1.5},
+				 {-0.5, -0.5, -1.5}, {-0.5, -0.5, -1} };
+	struct vec3 bottom[4] = { {-1, -0.5, -1}, {-0.5, -0.5, -1},
+				 {-0.5, -0.5, -1.5}, {-1, -0.5, -1.5} };
+	renderer_draw_rect3d(renderer, front, 0xff0000ff);
+	renderer_draw_rect3d(renderer, right, 0xffff00ff);
+	renderer_draw_rect3d(renderer, bottom, 0xff00ff00);
+	
 	while (running) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {

@@ -107,7 +107,7 @@ static void draw_triangle_span(SDL_Surface *surface, struct line *tall,
 		}
 	} else if (tall->v[1].x == shrt->v[1].x &&
 		   tall->v[1].y == shrt->v[1].y) {
-		for (int y = shrt->v[1].y; y > shrt->v[0].y; y--) {
+		for (int y = shrt->v[1].y; y >= shrt->v[0].y; y--) {
 			int sx = shrt->v[0].x + sslope * (y - shrt->v[0].y);
 			int tx = tall->v[0].x + tslope * (y - tall->v[0].y);
 			int min, max;
@@ -172,6 +172,12 @@ void draw_rect(SDL_Surface *surface, struct vec2 v[4], unsigned int color)
 	draw_triangle(surface, v2, color);
 }
 
+void draw_line3d(SDL_Surface *surface, struct vec3 v[2], unsigned int color)
+{
+
+
+}
+
 /**
  * renderer_new - creates an initialized struct renderer
  * @width:	the width of the screen
@@ -217,14 +223,7 @@ void renderer_display(struct renderer *rndr)
 	SDL_Flip(rndr->screen);
 }
 
-/**
- * renderer_draw_line - the standard line drawing function
- * @rndr:	the renderer
- * @v:		vertices of the line
- * @color:	color of the line
- */
-void renderer_draw_line(struct renderer *rndr, struct vec2 v[2],
-			unsigned int color)
+static void map_line_to_viewport(struct renderer *rndr, struct vec2 v[2])
 {
 	v[0].x = mapf(v[0].x, rndr->viewport.left, rndr->viewport.right,
 		      0, rndr->screen->w);
@@ -234,18 +233,9 @@ void renderer_draw_line(struct renderer *rndr, struct vec2 v[2],
 		      0, rndr->screen->w);
 	v[1].y = mapf(v[1].y, rndr->viewport.top, rndr->viewport.bottom,
 		      0, rndr->screen->h);
-
-	draw_line(rndr->screen, v, color);
 }
 
-/**
- * renderer_draw_triangle - standard triangle drawing function
- * @rndr:	the renderer
- * @v:		vertices of the triangle
- * @color:	color of the triangle
- */
-void renderer_draw_triangle(struct renderer *rndr, struct vec2 v[3],
-			    unsigned int color)
+static void map_triangle_to_viewport(struct renderer *rndr, struct vec2 v[3])
 {
 	v[0].x = mapf(v[0].x, rndr->viewport.left, rndr->viewport.right,
 		      0, rndr->screen->w);
@@ -259,18 +249,9 @@ void renderer_draw_triangle(struct renderer *rndr, struct vec2 v[3],
 		      0, rndr->screen->w);
 	v[2].y = mapf(v[2].y, rndr->viewport.top, rndr->viewport.bottom,
 		      0, rndr->screen->h);
-	
-	draw_triangle(rndr->screen, v, color);
 }
 
-/**
- * renderer_draw_rect - standard rectangle drawing function
- * @rndr:	the renderer
- * @v:		vertices of the rectangle
- * @color:	color of the rectangle
- */
-void renderer_draw_rect(struct renderer *rndr, struct vec2 v[4],
-			    unsigned int color)
+static void map_rect_to_viewport(struct renderer *rndr, struct vec2 v[4])
 {
 	v[0].x = mapf(v[0].x, rndr->viewport.left, rndr->viewport.right,
 		      0, rndr->screen->w);
@@ -288,6 +269,99 @@ void renderer_draw_rect(struct renderer *rndr, struct vec2 v[4],
 		      0, rndr->screen->w);
 	v[3].y = mapf(v[3].y, rndr->viewport.top, rndr->viewport.bottom,
 		      0, rndr->screen->h);
-	
+}
+
+/**
+ * renderer_draw_line - the standard line drawing function
+ * @rndr:	the renderer
+ * @v:		vertices of the line
+ * @color:	color of the line
+ */
+void renderer_draw_line(struct renderer *rndr, struct vec2 v[2],
+			unsigned int color)
+{
+	map_line_to_viewport(rndr, v);
+	draw_line(rndr->screen, v, color);
+}
+
+/**
+ * renderer_draw_triangle - standard triangle drawing function
+ * @rndr:	the renderer
+ * @v:		vertices of the triangle
+ * @color:	color of the triangle
+ */
+void renderer_draw_triangle(struct renderer *rndr, struct vec2 v[3],
+			    unsigned int color)
+{
+	map_triangle_to_viewport(rndr, v);
+	draw_triangle(rndr->screen, v, color);
+}
+
+/**
+ * renderer_draw_rect - standard rectangle drawing function
+ * @rndr:	the renderer
+ * @v:		vertices of the rectangle
+ * @color:	color of the rectangle
+ */
+void renderer_draw_rect(struct renderer *rndr, struct vec2 v[4],
+			    unsigned int color)
+{
+	map_rect_to_viewport(rndr, v);
 	draw_rect(rndr->screen, v, color);
+}
+
+void renderer_draw_line3d(struct renderer *rndr, struct vec3 v[2],
+			  unsigned int color)
+{
+	float zscale[2] = {-1 / v[0].z, -1 / v[1].z};
+
+	v[0].x *= zscale[0];
+	v[0].y *= zscale[0];
+	v[1].x *= zscale[1];
+	v[1].y *= zscale[1];
+
+	struct vec2 tv[2] = { {v[0].x, v[0].y}, {v[1].x, v[1].y} };
+	map_line_to_viewport(rndr, tv);
+	draw_line(rndr->screen, tv, color);
+}
+
+void renderer_draw_triangle3d(struct renderer *rndr, struct vec3 v[3],
+			  unsigned int color)
+{
+	float zscale[3] = {-1 / v[0].z, -1 / v[1].z, -1 / v[2].z};
+
+	v[0].x *= zscale[0];
+	v[0].y *= zscale[0];
+	v[1].x *= zscale[1];
+	v[1].y *= zscale[1];
+	v[2].x *= zscale[2];
+	v[2].y *= zscale[2];
+
+	struct vec2 tv[3] = { {v[0].x, v[0].y},
+			      {v[1].x, v[1].y},
+			      {v[2].x, v[2].y} };
+	map_triangle_to_viewport(rndr, tv);
+	draw_triangle(rndr->screen, tv, color);
+}
+
+void renderer_draw_rect3d(struct renderer *rndr, struct vec3 v[4],
+			  unsigned int color)
+{
+	float zscale[4] = {-1 / v[0].z, -1 / v[1].z, -1 / v[2].z, -1 / v[3].z};
+
+	v[0].x *= zscale[0];
+	v[0].y *= zscale[0];
+	v[1].x *= zscale[1];
+	v[1].y *= zscale[1];
+	v[2].x *= zscale[2];
+	v[2].y *= zscale[2];
+	v[3].x *= zscale[3];
+	v[3].y *= zscale[3];
+
+	struct vec2 tv[4] = { {v[0].x, v[0].y},
+			      {v[1].x, v[1].y},
+			      {v[2].x, v[2].y},
+			      {v[3].x, v[3].y} };
+	map_rect_to_viewport(rndr, tv);
+	draw_rect(rndr->screen, tv, color);
 }
