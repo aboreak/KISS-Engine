@@ -177,6 +177,11 @@ struct renderer * renderer_new(int width, int height)
 	return rndr;
 }
 
+void renderer_set_viewport(struct renderer *rndr, struct rect *viewport)
+{
+	rndr->viewport = *viewport;
+}
+
 void renderer_display(struct renderer *rndr)
 {
 	SDL_Flip(rndr->screen);

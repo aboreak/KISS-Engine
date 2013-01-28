@@ -31,6 +31,8 @@ struct renderer {
 
 struct renderer * renderer_new(int width, int height);
 
+void renderer_set_viewport(struct renderer *rndr, struct rect *viewport);
+
 void renderer_display();
 
 void renderer_draw_line(struct renderer *rndr, struct vec2 v[2],
