@@ -12,8 +12,11 @@ int main(int argc, char *argv[])
 	renderer = renderer_new(640, 480);
 	running = true;
 
-	struct vec2 v1[2] = {{-1, 0}, {1, 1}};
+	struct vec2 v1[2] = { {0.5, 0.5}, {1, 1} };
 	renderer_draw_line(renderer, v1, 0xff00aaff);
+
+	struct vec2 v2[4] = { {-0.5, -0.5}, {0, -0.5}, {0, 0}, {-0.5, 0} };
+	renderer_draw_rect(renderer, v2, 0xffffff00);
 
 	while (running) {
 		SDL_Event event;

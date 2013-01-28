@@ -156,6 +156,27 @@ void draw_triangle(SDL_Surface *surface, struct vec2 v[3], unsigned int color)
 			   color);
 }
 
+/**
+ * draw_rect - simple rectangle drawing function
+ * @surface:	target surface to draw onto
+ * @v:		three vertices of the triangle
+ * @color:	color of the triangle
+ */
+void draw_rect(SDL_Surface *surface, struct vec2 v[4], unsigned int color)
+{
+	struct vec2 v2[3] = {v[0], v[1], v[2]};
+	draw_triangle(surface, v2, color);
+
+	v2[1] = v[2];
+	v2[2] = v[3];
+	draw_triangle(surface, v2, color);
+}
+
+/**
+ * renderer_new - creates an initialized struct renderer
+ * @width:	the width of the screen
+ * @height:	the height of the screen
+ */
 struct renderer * renderer_new(int width, int height)
 {
 	struct renderer *rndr = NEW(struct renderer);
@@ -177,16 +198,31 @@ struct renderer * renderer_new(int width, int height)
 	return rndr;
 }
 
+/**
+ * renderer_set_viewport - set the dimension of the viewport similar to OpenGL
+ * @rndr:	the renderer
+ * @viewport:	the desired dimension the viewport
+ */
 void renderer_set_viewport(struct renderer *rndr, struct rect *viewport)
 {
 	rndr->viewport = *viewport;
 }
 
+/**
+ * renderer_display - update the screen with the latest framebuffer
+ * @rndr:	the renderer
+ */
 void renderer_display(struct renderer *rndr)
 {
 	SDL_Flip(rndr->screen);
 }
 
+/**
+ * renderer_draw_line - the standard line drawing function
+ * @rndr:	the renderer
+ * @v:		vertices of the line
+ * @color:	color of the line
+ */
 void renderer_draw_line(struct renderer *rndr, struct vec2 v[2],
 			unsigned int color)
 {
@@ -200,4 +236,58 @@ void renderer_draw_line(struct renderer *rndr, struct vec2 v[2],
 		      0, rndr->screen->h);
 
 	draw_line(rndr->screen, v, color);
+}
+
+/**
+ * renderer_draw_triangle - standard triangle drawing function
+ * @rndr:	the renderer
+ * @v:		vertices of the triangle
+ * @color:	color of the triangle
+ */
+void renderer_draw_triangle(struct renderer *rndr, struct vec2 v[3],
+			    unsigned int color)
+{
+	v[0].x = mapf(v[0].x, rndr->viewport.left, rndr->viewport.right,
+		      0, rndr->screen->w);
+	v[0].y = mapf(v[0].y, rndr->viewport.top, rndr->viewport.bottom,
+		      0, rndr->screen->h);
+	v[1].x = mapf(v[1].x, rndr->viewport.left, rndr->viewport.right,
+		      0, rndr->screen->w);
+	v[1].y = mapf(v[1].y, rndr->viewport.top, rndr->viewport.bottom,
+		      0, rndr->screen->h);
+	v[2].x = mapf(v[2].x, rndr->viewport.left, rndr->viewport.right,
+		      0, rndr->screen->w);
+	v[2].y = mapf(v[2].y, rndr->viewport.top, rndr->viewport.bottom,
+		      0, rndr->screen->h);
+	
+	draw_triangle(rndr->screen, v, color);
+}
+
+/**
+ * renderer_draw_rect - standard rectangle drawing function
+ * @rndr:	the renderer
+ * @v:		vertices of the rectangle
+ * @color:	color of the rectangle
+ */
+void renderer_draw_rect(struct renderer *rndr, struct vec2 v[4],
+			    unsigned int color)
+{
+	v[0].x = mapf(v[0].x, rndr->viewport.left, rndr->viewport.right,
+		      0, rndr->screen->w);
+	v[0].y = mapf(v[0].y, rndr->viewport.top, rndr->viewport.bottom,
+		      0, rndr->screen->h);
+	v[1].x = mapf(v[1].x, rndr->viewport.left, rndr->viewport.right,
+		      0, rndr->screen->w);
+	v[1].y = mapf(v[1].y, rndr->viewport.top, rndr->viewport.bottom,
+		      0, rndr->screen->h);
+	v[2].x = mapf(v[2].x, rndr->viewport.left, rndr->viewport.right,
+		      0, rndr->screen->w);
+	v[2].y = mapf(v[2].y, rndr->viewport.top, rndr->viewport.bottom,
+		      0, rndr->screen->h);
+	v[3].x = mapf(v[3].x, rndr->viewport.left, rndr->viewport.right,
+		      0, rndr->screen->w);
+	v[3].y = mapf(v[3].y, rndr->viewport.top, rndr->viewport.bottom,
+		      0, rndr->screen->h);
+	
+	draw_rect(rndr->screen, v, color);
 }
