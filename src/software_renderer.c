@@ -66,33 +66,33 @@ void draw_line(SDL_Surface *surface, struct vec2 v[2], unsigned int color)
 /**
  * draw_triangle_span - draw the horizontal lines of the triangle
  * @surface:	target surface to draw onto
- * @tallest:	the tallest line in the triangle
- * @shorter:	one of the two shorter lines of the triangle
+ * @tall:	the tall line in the triangle
+ * @shrt:	one of the two shrt lines of the triangle
  * @color:	color of the triangle
  */
-static void draw_triangle_span(SDL_Surface *surface, struct line *tallest,
-			       struct line *shorter, unsigned int color)
+static void draw_triangle_span(SDL_Surface *surface, struct line *tall,
+			       struct line *shrt, unsigned int color)
 {
 	int tdx, tdy;
 	int sdx, sdy;
 	float tslope, sslope;
 
-	if (tallest->v[0].y > tallest->v[1].y)
-		swap(&tallest->v[0], &tallest->v[1], sizeof(struct vec2i));
-	if (shorter->v[0].y > shorter->v[1].y)
-		swap(&shorter->v[0], &shorter->v[1], sizeof(struct vec2i));
-	tdx = tallest->v[1].x - tallest->v[0].x;
-	tdy = tallest->v[1].y - tallest->v[0].y;
-	sdx = shorter->v[1].x - shorter->v[0].x;
-	sdy = shorter->v[1].y - shorter->v[0].y;
+	if (tall->v[0].y > tall->v[1].y)
+		swap(&tall->v[0], &tall->v[1], sizeof(struct vec2i));
+	if (shrt->v[0].y > shrt->v[1].y)
+		swap(&shrt->v[0], &shrt->v[1], sizeof(struct vec2i));
+	tdx = tall->v[1].x - tall->v[0].x;
+	tdy = tall->v[1].y - tall->v[0].y;
+	sdx = shrt->v[1].x - shrt->v[0].x;
+	sdy = shrt->v[1].y - shrt->v[0].y;
 	tslope = (float) tdx / tdy;
 	sslope = (float) sdx / sdy;
 
-	if (tallest->v[0].x == shorter->v[0].x &&
-	    tallest->v[0].y == shorter->v[0].y) {
-		for (int y = shorter->v[0].y; y < shorter->v[1].y; y++) {
-			int sx = shorter->v[0].x + sslope * (y - shorter->v[0].y);
-			int tx = tallest->v[0].x + tslope * (y - tallest->v[0].y);
+	if (tall->v[0].x == shrt->v[0].x &&
+	    tall->v[0].y == shrt->v[0].y) {
+		for (int y = shrt->v[0].y; y < shrt->v[1].y; y++) {
+			int sx = shrt->v[0].x + sslope * (y - shrt->v[0].y);
+			int tx = tall->v[0].x + tslope * (y - tall->v[0].y);
 			int min, max;
 			if (sx < tx) {
 				min = sx;
@@ -105,11 +105,11 @@ static void draw_triangle_span(SDL_Surface *surface, struct line *tallest,
 				draw_pixel(surface, x, y, color);
 			}
 		}
-	} else if (tallest->v[1].x == shorter->v[1].x &&
-		   tallest->v[1].y == shorter->v[1].y) {
-		for (int y = shorter->v[1].y; y > shorter->v[0].y; y--) {
-			int sx = shorter->v[0].x + sslope * (y - shorter->v[0].y);
-			int tx = tallest->v[0].x + tslope * (y - tallest->v[0].y);
+	} else if (tall->v[1].x == shrt->v[1].x &&
+		   tall->v[1].y == shrt->v[1].y) {
+		for (int y = shrt->v[1].y; y > shrt->v[0].y; y--) {
+			int sx = shrt->v[0].x + sslope * (y - shrt->v[0].y);
+			int tx = tall->v[0].x + tslope * (y - tall->v[0].y);
 			int min, max;
 			if (sx < tx) {
 				min = sx;
@@ -138,21 +138,21 @@ static void draw_triangle_span(SDL_Surface *surface, struct line *tallest,
 void draw_triangle(SDL_Surface *surface, struct vec2 v[3], unsigned int color)
 {
 	struct line lines[3];
-	int tallest = 0;
-	int tallest_height = 0;
+	int tall = 0;
+	int tall_height = 0;
 
 	for (int i = 0; i < 3; i++) {
 		lines[i] = (struct line) {{v[i], v[(i+1) % 3]}};
 		int height = abs(lines[i].v[0].y - lines[i].v[1].y);
-		if (tallest_height < height) {
-			tallest_height = height;
-			tallest = i;
+		if (tall_height < height) {
+			tall_height = height;
+			tall = i;
 		}
 	}
 
-	draw_triangle_span(surface, &lines[tallest], &lines[(tallest + 1) % 3],
+	draw_triangle_span(surface, &lines[tall], &lines[(tall + 1) % 3],
 			   color);
-	draw_triangle_span(surface, &lines[tallest], &lines[(tallest + 2) % 3],
+	draw_triangle_span(surface, &lines[tall], &lines[(tall + 2) % 3],
 			   color);
 }
 
