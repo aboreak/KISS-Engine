@@ -42,7 +42,7 @@ void draw_line(SDL_Surface *surface, struct vec2 v[2], unsigned int color)
 			max = &v[1];
 		}
 		slope = dy / dx;
-		for (float x = min->x; x <= max->x; x++) {
+		for (float x = min->x; x < max->x; x++) {
 			float y = min->y + slope * (x - min->x);
 			draw_pixel(surface, (int) x, (int) y, color);
 		}

@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	renderer = renderer_new(640, 480);
 	running = true;
 
-	struct vec2 v1[2] = {{-1, 0}, {1, 0}};
+	struct vec2 v1[2] = {{-1, 0}, {1, 1}};
 	renderer_draw_line(renderer, v1, 0xff00aaff);
 
 	while (running) {
