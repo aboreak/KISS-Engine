@@ -90,7 +90,7 @@ static void draw_triangle_span(SDL_Surface *surface, struct line *tallest,
 
 	if (tallest->v[0].x == shorter->v[0].x &&
 	    tallest->v[0].y == shorter->v[0].y) {
-		for (int y = shorter->v[0].y; y <= shorter->v[1].y; y++) {
+		for (int y = shorter->v[0].y; y < shorter->v[1].y; y++) {
 			int sx = shorter->v[0].x + sslope * (y - shorter->v[0].y);
 			int tx = tallest->v[0].x + tslope * (y - tallest->v[0].y);
 			int min, max;
@@ -101,13 +101,13 @@ static void draw_triangle_span(SDL_Surface *surface, struct line *tallest,
 				min = tx;
 				max = sx;
 			}
-			for (int x = min; x <= max; x++) {
+			for (int x = min; x < max; x++) {
 				draw_pixel(surface, x, y, color);
 			}
 		}
 	} else if (tallest->v[1].x == shorter->v[1].x &&
 		   tallest->v[1].y == shorter->v[1].y) {
-		for (int y = shorter->v[1].y; y >= shorter->v[0].y; y--) {
+		for (int y = shorter->v[1].y; y > shorter->v[0].y; y--) {
 			int sx = shorter->v[0].x + sslope * (y - shorter->v[0].y);
 			int tx = tallest->v[0].x + tslope * (y - tallest->v[0].y);
 			int min, max;
@@ -118,7 +118,7 @@ static void draw_triangle_span(SDL_Surface *surface, struct line *tallest,
 				min = tx;
 				max = sx;
 			}
-			for (int x = min; x <= max; x++) {
+			for (int x = min; x < max; x++) {
 				draw_pixel(surface, x, y, color);
 			}
 		}
