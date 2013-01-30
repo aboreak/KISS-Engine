@@ -1,11 +1,13 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
+#include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
 #include <string.h>
 #include <assert.h>
-#include <errno.h>
 
 #define NEW(x) ((x*)malloc(sizeof(x)))
 
@@ -27,6 +29,14 @@
 #define KB (1024)
 #define MB (1048576)
 #define GB (1073741824)
+
+#ifndef TRUE
+#define TRUE (1)
+#endif
+
+#ifndef FALSE
+#define FALSE (!TRUE)
+#endif
 
 extern const size_t POINTER_SIZE;
 extern const size_t UNSIGNED_SIZE;
