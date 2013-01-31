@@ -64,6 +64,69 @@ void draw_line(SDL_Surface *surface, struct vec2 v[2], unsigned int color)
 }
 
 /**
+ * draw_line2 - Bresenham's line drawing function (one octane only)
+ * @surface:	target surface to draw onto
+ * @v:		positions of the line vertices
+ * @color:	color of the line
+ */
+void draw_line2(SDL_Surface *surface, struct vec2 v[2], unsigned int color)
+{
+	int dx = v[1].x - v[0].x;
+	int dy = v[1].y - v[0].y;
+	float error = 0, derror = fabs((float) dy / dx);
+	
+	int x, y = v[0].y;
+	for (x = v[0].x; x < v[1].x; x++) {
+		draw_pixel(surface, x, y, color);
+		error += derror;
+		if (error >= 0.5) {
+			y++;
+			error -= 1.0;
+		}
+	}
+}
+
+/**
+ * draw_line3 - Bresenham's line drawing function (all octanes)
+ * @surface:	target surface to draw onto
+ * @v:		positions of the line vertices
+ * @color:	color of the line
+ */
+
+void draw_line3(SDL_Surface *surface, struct vec2i v[2], unsigned int color)
+{
+	int steep;
+	int dx, dy;
+	int error;
+	int ystep;
+	
+	steep = abs(v[1].y - v[0].y) > abs(v[1].x - v[0].x);
+	if (steep) {
+		swapi(&v[0].x, &v[0].y);
+		swapi(&v[1].x, &v[1].y);
+	}
+	if (v[0].x > v[1].x) {
+		swapi(&v[0].x, &v[1].x);
+		swapi(&v[0].y, &v[1].y);
+	}
+	dx = v[1].x - v[0].x;
+	dy = abs(v[1].y - v[0].y);
+	error = dx / 2;
+	ystep = (v[0].y < v[1].y) ? 1 : -1;
+
+	int x, y = v[0].y;
+	for (x = v[0].x; x < v[1].x; x++) {
+		steep ? draw_pixel(surface, y, x, color) :
+			draw_pixel(surface, x, y, color);
+		error -= dy;
+		if (error < 0) {
+			y += ystep;
+			error += dx;
+		}
+	}
+}
+
+/**
  * draw_triangle_span - draw the horizontal lines of the triangle
  * @surface:	target surface to draw onto
  * @tall:	the tall line in the triangle
@@ -170,6 +233,12 @@ void draw_rect(SDL_Surface *surface, struct vec2 v[4], unsigned int color)
 	v2[1] = v[2];
 	v2[2] = v[3];
 	draw_triangle(surface, v2, color);
+}
+
+void draw_circle(SDL_Surface *surface, struct vec2 v[2], float radius,
+		 unsigned int color)
+{
+	
 }
 
 /**

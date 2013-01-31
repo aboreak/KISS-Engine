@@ -15,9 +15,16 @@ void draw_pixels(SDL_Surface *surface, int x, int y, unsigned int color, int n);
 
 void draw_line(SDL_Surface *surface, struct vec2 v[2], unsigned int color);
 
+void draw_line2(SDL_Surface *surface, struct vec2 v[2], unsigned int color);
+
+void draw_line3(SDL_Surface *surface, struct vec2i v[2], unsigned int color);
+
 void draw_triangle(SDL_Surface *surface, struct vec2 v[3], unsigned int color);
 
 void draw_rect(SDL_Surface *surface, struct vec2 v[4], unsigned int color);
+
+void draw_circle(SDL_Surface *surface, struct vec2 v[2], float radius,
+		 unsigned int color);
 
 void draw_line3d(SDL_Surface *surface, struct vec3 v[2], unsigned int color);
 
