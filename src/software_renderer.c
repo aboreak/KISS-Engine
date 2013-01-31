@@ -95,33 +95,25 @@ void draw_line2(SDL_Surface *surface, struct vec2 v[2], unsigned int color)
 
 void draw_line3(SDL_Surface *surface, struct vec2i v[2], unsigned int color)
 {
-	int steep;
-	int dx, dy;
-	int error;
-	int ystep;
-	
-	steep = abs(v[1].y - v[0].y) > abs(v[1].x - v[0].x);
-	if (steep) {
-		swapi(&v[0].x, &v[0].y);
-		swapi(&v[1].x, &v[1].y);
-	}
-	if (v[0].x > v[1].x) {
-		swapi(&v[0].x, &v[1].x);
-		swapi(&v[0].y, &v[1].y);
-	}
-	dx = v[1].x - v[0].x;
-	dy = abs(v[1].y - v[0].y);
-	error = dx / 2;
-	ystep = (v[0].y < v[1].y) ? 1 : -1;
+	int dx = abs(v[0].x - v[1].x);
+	int dy = abs(v[0].y - v[1].y);
+	int sx = (v[0].x < v[1].x) ? 1 : -1;
+	int sy = (v[0].y < v[1].y) ? 1 : -1;
+	int err = dx - dy;
+	int e2;
 
-	int x, y = v[0].y;
-	for (x = v[0].x; x < v[1].x; x++) {
-		steep ? draw_pixel(surface, y, x, color) :
-			draw_pixel(surface, x, y, color);
-		error -= dy;
-		if (error < 0) {
-			y += ystep;
-			error += dx;
+	for (;;) {
+		draw_pixel(surface, v[0].x, v[0].y, color);
+		if (v[0].x == v[1].x && v[0].y == v[1].y)
+			break;
+		e2 = err * 2;
+		if (e2 > -dy) {
+			err -= dy;
+			v[0].x += sx;
+		}
+		if (e2 < dx) {
+			err += dx;
+			v[0].y += sy;
 		}
 	}
 }
