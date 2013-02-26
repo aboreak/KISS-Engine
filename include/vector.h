@@ -84,7 +84,7 @@ static inline float vec2i_mag(struct vec2i *v)
 	return sqrtf(v->x * v->x + v->y * v->y);
 }
 
-static inline struct vec2i * vec2i_zero(struct vec2i *v)
+static inline struct vec2i *vec2i_zero(struct vec2i *v)
 {
 	v->x = 0;
 	v->y = 0;
@@ -137,7 +137,8 @@ static inline float vec3i_mag(struct vec3i *v)
 
 static inline struct vec3i vec3i_zero(struct vec3i *v)
 {
-	*v = (struct vec3i) { 0, 0, 0 };
+	*v = (struct vec3i) {
+	0, 0, 0};
 
 	return *v;
 }
@@ -182,7 +183,7 @@ static inline float vec2_mag(struct vec2 *v)
 	return sqrtf(v->x * v->x + v->y * v->y);
 }
 
-static inline struct vec2 * vec2_zero(struct vec2 *v)
+static inline struct vec2 *vec2_zero(struct vec2 *v)
 {
 	v->x = 0.0f;
 	v->y = 0.0f;
@@ -255,7 +256,7 @@ static inline float vec3_mag(struct vec3 *v)
 	return sqrtf(v->x * v->x + v->y * v->y + v->z * v->z);
 }
 
-static inline struct vec3 * vec3_zero(struct vec3 *v)
+static inline struct vec3 *vec3_zero(struct vec3 *v)
 {
 	v->x = 0.0f;
 	v->y = 0.0f;
@@ -314,8 +315,7 @@ static inline struct vec4 vec4_neg(struct vec4 *v)
 
 static inline float vec4_dot(struct vec4 *a, struct vec4 *b)
 {
-	return a->x * b->x + a->y * b->y + a->z * b->z + a->w * 
-		b->w;
+	return a->x * b->x + a->y * b->y + a->z * b->z + a->w * b->w;
 }
 
 static inline float vec4_mag(struct vec4 *v)
@@ -323,7 +323,7 @@ static inline float vec4_mag(struct vec4 *v)
 	return sqrtf(v->x * v->x + v->y * v->y + v->z * v->z + v->w * v->w);
 }
 
-static inline struct vec4 * vec4_zero(struct vec4 *v)
+static inline struct vec4 *vec4_zero(struct vec4 *v)
 {
 	v->x = 0.0f;
 	v->y = 0.0f;

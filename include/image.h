@@ -12,13 +12,13 @@ enum {
 };
 
 struct image {
-	unsigned char *	data;
-	unsigned int	width;
-	unsigned int	height;
-	unsigned int	format;
+	unsigned char *data;
+	unsigned int width;
+	unsigned int height;
+	unsigned int format;
 };
 
-struct image * image_new(const char *filename);
+struct image *image_new(const char *filename);
 
 void image_delete(struct image **img);
 

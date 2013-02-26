@@ -5,9 +5,9 @@
 
 static void read_file_to_memory(const char *file_name, void *buf)
 {
-	FILE *	file;
-	size_t	file_size;
-	void *	buf;
+	FILE *file;
+	size_t file_size;
+	void *buf;
 
 	file = fopen(file_name, "r");
 	if (!file) {

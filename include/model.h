@@ -8,18 +8,18 @@ struct material;
 struct texture;
 
 struct model {
-	struct vec3		translation;
-	struct vec3		rotation;
-	struct vec3		center;
-	unsigned		id[3];
-	struct mesh *		mesh;
-	struct material *	material;
-	struct texture *	texture;
+	struct vec3 translation;
+	struct vec3 rotation;
+	struct vec3 center;
+	unsigned id[3];
+	struct mesh *mesh;
+	struct material *material;
+	struct texture *texture;
 };
 
 #define model_center(x) (x->center)
 
-struct model * model_new(const char *filename);
+struct model *model_new(const char *filename);
 
 void model_delete(struct model **model);
 

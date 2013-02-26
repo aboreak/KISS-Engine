@@ -17,26 +17,26 @@ enum LightType {
 };
 
 struct light {
-	struct vec3	translation;
-	struct vec3	rotation;
-	struct vec3	intensity;
-	float		spot_exponent;
-	float		spot_cutoff;
-	float		constant_attenuation;
-	float		linear_attenuation;
-	float		quadratic_attenuation;
-	unsigned	type;
+	struct vec3 translation;
+	struct vec3 rotation;
+	struct vec3 intensity;
+	float spot_exponent;
+	float spot_cutoff;
+	float constant_attenuation;
+	float linear_attenuation;
+	float quadratic_attenuation;
+	unsigned type;
 };
 
-struct light * light_new(unsigned type);
+struct light *light_new(unsigned type);
 
 void light_delete(struct light **light);
 
 inline void light_set_translation(struct light *light, float x, float y,
-	float z);
+				  float z);
 
 inline void light_set_rotation(struct light *light, float pitch, float yaw,
-	float roll);
+			       float roll);
 
 inline void light_set_intensity(struct light *light, float r, float g, float b);
 
@@ -47,7 +47,7 @@ inline void light_set_spot_cutoff(struct light *light, float spot_cutoff);
 inline void light_translate(struct light *light, float x, float y, float z);
 
 inline void light_rotate(struct light *light, float pitch, float yaw,
-	float roll);
+			 float roll);
 
 inline void light_set_type(struct light *light, unsigned int type);
 

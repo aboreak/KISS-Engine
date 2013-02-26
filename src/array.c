@@ -3,15 +3,15 @@
 
 static void array_extend(struct array *ary);
 
-struct array * array_new_real(size_t esize)
+struct array *array_new_real(size_t esize)
 {
 	struct array *ary;
 
 	NEW2(ary);
-	ary->data  = NULL;
+	ary->data = NULL;
 	ary->esize = esize;
-	ary->len   = 0;
-	ary->cap   = 0;
+	ary->len = 0;
+	ary->cap = 0;
 
 	return ary;
 }
@@ -27,7 +27,7 @@ inline void array_put(struct array *ary, size_t i, void *data)
 	memcpy(ary->data + ary->esize * i, data, ary->esize);
 }
 
-inline void * array_get_ptr(struct array *ary, size_t i)
+inline void *array_get_ptr(struct array *ary, size_t i)
 {
 	return ary->data + i * ary->esize;
 }
@@ -57,7 +57,7 @@ void array_pop(struct array *ary, size_t i)
 	void *dst = ary->data + i * esize;
 	void *last = ary->data + ary->len * esize;
 
-	memcpy(dst, dst + esize, last-dst-esize);
+	memcpy(dst, dst + esize, last - dst - esize);
 	ary->len--;
 }
 
@@ -82,7 +82,7 @@ inline size_t array_size(struct array *ary)
 void array_print(struct array *ary)
 {
 	printf("data: %p\nesize: %zu\nlen: %zu\ncap: %zu\n", ary->data,
-		ary->esize, ary->len, ary->cap);
+	       ary->esize, ary->len, ary->cap);
 }
 
 static void array_extend(struct array *ary)

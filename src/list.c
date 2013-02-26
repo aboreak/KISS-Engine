@@ -1,7 +1,7 @@
 #include "list.h"
 #include "common.h"
 
-static struct list * new_link(unsigned esize)
+static struct list *new_link(unsigned esize)
 {
 	struct list *lst;
 
@@ -15,7 +15,7 @@ static struct list * new_link(unsigned esize)
 	return lst;
 }
 
-struct list * list_new_real(unsigned esize)
+struct list *list_new_real(unsigned esize)
 {
 	struct list *lst = NEW(struct list);
 
@@ -30,7 +30,7 @@ struct list * list_new_real(unsigned esize)
 
 void list_delete(struct list **lst)
 {
-	while (list_remove_front(lst));
+	while (list_remove_front(lst)) ;
 	*lst = NULL;
 }
 
@@ -46,7 +46,7 @@ void list_reserve(struct list *lst, unsigned n)
 			if (cnt >= n)
 				break;
 		}
-		if  (!lst->next)
+		if (!lst->next)
 			lst->next = new_link(lst->esize);
 		lst = lst->next;
 	}
@@ -65,7 +65,7 @@ unsigned list_reserved_num(struct list *lst)
 	return cnt;
 }
 
-struct list * list_insert_back(struct list *lst, void *data)
+struct list *list_insert_back(struct list *lst, void *data)
 {
 	while (lst) {
 		if (!lst->occupied) {
@@ -83,7 +83,7 @@ struct list * list_insert_back(struct list *lst, void *data)
 	return lst;
 }
 
-struct list * list_remove_front(struct list **lst)
+struct list *list_remove_front(struct list **lst)
 {
 	if (*lst) {
 		struct list *next = (*lst)->next;
@@ -107,7 +107,7 @@ inline void list_unoccupy(struct list *lst)
 	lst->occupied = 0;
 }
 
-struct list * list_unlink_front(struct list **lst)
+struct list *list_unlink_front(struct list **lst)
 {
 	struct list *tmp = NULL;
 	if (*lst) {
@@ -119,14 +119,14 @@ struct list * list_unlink_front(struct list **lst)
 	return tmp;
 }
 
-struct list * list_link_front(struct list **lst, struct list *other)
+struct list *list_link_front(struct list **lst, struct list *other)
 {
 	other->next = *lst;
 	*lst = other;
 	return *lst;
 }
 
-unsigned char * list_get(struct list *lst, unsigned i)
+unsigned char *list_get(struct list *lst, unsigned i)
 {
 	unsigned cnt = 0;
 
@@ -141,5 +141,3 @@ unsigned char * list_get(struct list *lst, unsigned i)
 
 	return NULL;
 }
-
-

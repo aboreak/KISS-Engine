@@ -51,20 +51,17 @@ static inline int mapi(int val, int min1, int max1, int min2, int max2)
 
 static inline double clampd(double val, double min, double max)
 {
-	return (val < min) ? min :
-			    (val > max) ? max : val;
+	return (val < min) ? min : (val > max) ? max : val;
 }
 
 static inline float clampf(float val, float min, float max)
 {
-	return (val < min) ? min :
-			     (val > max) ? max : val;
+	return (val < min) ? min : (val > max) ? max : val;
 }
 
 static inline int clampi(int val, int min, int max)
 {
-	return (val < min) ? min :
-			     (val > max) ? max : val;
+	return (val < min) ? min : (val > max) ? max : val;
 }
 
 #endif

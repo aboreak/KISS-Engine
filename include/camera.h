@@ -9,7 +9,7 @@ struct camera {
 	struct vec3 up;
 };
 
-struct camera * camera_new();
+struct camera *camera_new();
 
 void camera_delete(struct camera **cam);
 

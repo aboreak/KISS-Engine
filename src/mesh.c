@@ -16,7 +16,7 @@ static void parse_face_token(char *token, struct vec3i *f)
 	char *c = strchr(token, '/');
 	if (c == NULL)
 		return;
-	
+
 	c++;
 	if (*c == '/') {
 		c++;
@@ -35,8 +35,9 @@ static void parse_face_token(char *token, struct vec3i *f)
 	return;
 }
 
-static void parse_file(FILE *file, struct mesh *mesh, struct array *vertices,
-	struct array *texcoords, struct array *normals, struct array *faces)
+static void parse_file(FILE * file, struct mesh *mesh, struct array *vertices,
+		       struct array *texcoords, struct array *normals,
+		       struct array *faces)
 {
 	char line[LINE_LENGTH];
 	while (fgets(line, LINE_LENGTH, file)) {
@@ -99,12 +100,13 @@ static void parse_file(FILE *file, struct mesh *mesh, struct array *vertices,
 
 static void calculate_center(struct mesh *mesh, struct array *vertices)
 {
-	mesh->center = (struct vec3) { 0, 0, 0 };
+	mesh->center = (struct vec3) {
+	0, 0, 0};
 	struct vec3 *v;
 
 	size_t i;
 	for (i = 0; i < vertices->len; i++) {
-		v = (struct vec3*) array_get_ptr(vertices, i);
+		v = (struct vec3 *)array_get_ptr(vertices, i);
 		mesh->center.x += v->x;
 		mesh->center.y += v->y;
 		mesh->center.z += v->z;
@@ -116,7 +118,8 @@ static void calculate_center(struct mesh *mesh, struct array *vertices)
 }
 
 static void create_indexed_data(struct mesh *mesh, struct array *vertices,
-	struct array *texcoords, struct array *normals, struct array *faces)
+				struct array *texcoords, struct array *normals,
+				struct array *faces)
 {
 	size_t i;
 	for (i = 0; i < faces->len; i++) {
@@ -130,7 +133,7 @@ static void create_indexed_data(struct mesh *mesh, struct array *vertices,
 		if (texcoords->len) {
 			if (mesh->indexed_texcoords == NULL)
 				mesh->indexed_texcoords =
-					array_new(struct vec2);
+				    array_new(struct vec2);
 			int idx = array_get(faces, i, struct vec3i).y - 1;
 			struct vec2 vt = array_get(texcoords, idx, struct vec2);
 			array_push_back(mesh->indexed_texcoords, &vt);
@@ -150,7 +153,7 @@ static void create_indexed_data(struct mesh *mesh, struct array *vertices,
 	array_delete(&faces);
 }
 
-struct mesh * mesh_new(const char *file_name)
+struct mesh *mesh_new(const char *file_name)
 {
 	FILE *file = fopen(file_name, "r");
 	if (file == NULL) {
@@ -168,12 +171,12 @@ struct mesh * mesh_new(const char *file_name)
 	struct array *texcoords = array_new(struct vec2);
 	struct array *normals = array_new(struct vec3);
 	struct array *faces = array_new(struct vec3i);
-	
+
 	parse_file(file, mesh, vertices, texcoords, normals, faces);
 	fclose(file);
 
 	calculate_center(mesh, vertices);
-	
+
 	create_indexed_data(mesh, vertices, texcoords, normals, faces);
 
 	return mesh;
@@ -181,12 +184,12 @@ struct mesh * mesh_new(const char *file_name)
 
 void mesh_delete(struct mesh **mesh)
 {
-	if ((*mesh)->indexed_vertices);
-		array_delete(&(*mesh)->indexed_vertices);
-	if ((*mesh)->indexed_texcoords);
-		array_delete(&(*mesh)->indexed_texcoords);
-	if ((*mesh)->indexed_normals);
-		array_delete(&(*mesh)->indexed_normals);
+	if ((*mesh)->indexed_vertices) ;
+	array_delete(&(*mesh)->indexed_vertices);
+	if ((*mesh)->indexed_texcoords) ;
+	array_delete(&(*mesh)->indexed_texcoords);
+	if ((*mesh)->indexed_normals) ;
+	array_delete(&(*mesh)->indexed_normals);
 
 	FREE(*mesh);
 }

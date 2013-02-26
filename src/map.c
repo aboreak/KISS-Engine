@@ -1,8 +1,8 @@
 #include "map.h"
 #include "common.h"
 
-struct map * map_new_real(unsigned key_size, unsigned value_size,
-	unsigned max_len)
+struct map *map_new_real(unsigned key_size, unsigned value_size,
+			 unsigned max_len)
 {
 	struct map *map = NEW(struct map);
 
@@ -70,11 +70,11 @@ void map_remove(struct map *map, void *key)
 		memcpy(cur_key, cur_key + key_size, key_size);
 		memcpy(cur_value, cur_value + value_size, value_size);
 	}
-	
+
 	map->len--;
 }
 
-void * map_get(struct map *map, void *key)
+void *map_get(struct map *map, void *key)
 {
 	unsigned char *cur_key;
 	unsigned key_size;

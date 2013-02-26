@@ -1,13 +1,13 @@
 #include "stack.h"
 #include "common.h"
 
-struct stack * stack_new()
+struct stack *stack_new()
 {
 	struct stack *stk;
 
 	NEW2(stk);
 	stk->count = 0;
-	stk->head  = NULL;
+	stk->head = NULL;
 
 	return stk;
 }
@@ -35,7 +35,7 @@ void stack_push(struct stack *stk, void *ptr)
 	stk->count++;
 }
 
-void * stack_pop(struct stack *stk)
+void *stack_pop(struct stack *stk)
 {
 	void *ptr;
 	struct elem *e;
@@ -51,7 +51,7 @@ void * stack_pop(struct stack *stk)
 	return ptr;
 }
 
-inline void * stack_top(struct stack *stk)
+inline void *stack_top(struct stack *stk)
 {
 	return stk->head->ptr;
 }

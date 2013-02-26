@@ -6,7 +6,7 @@
 #include "image.h"
 #include "common.h"
 
-struct texture * texture_new(const char *file_name)
+struct texture *texture_new(const char *file_name)
 {
 	struct image *image;
 	if (!(image = image_new(file_name)))
@@ -19,12 +19,12 @@ struct texture * texture_new(const char *file_name)
 	glBindTexture(GL_TEXTURE_2D, texture->id);
 	if (image->format == BGR_24)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width,
-			image->height, 0, GL_BGR, GL_UNSIGNED_BYTE,
-			image->data);
+			     image->height, 0, GL_BGR, GL_UNSIGNED_BYTE,
+			     image->data);
 	else if (image->format == BGRA_32)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->width,
-			image->height, 0, GL_BGRA, GL_UNSIGNED_BYTE,
-			image->data);
+			     image->height, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+			     image->data);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 

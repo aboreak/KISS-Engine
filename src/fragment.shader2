@@ -7,12 +7,12 @@ in vec2 texcoord;
 uniform sampler2D tex;
 
 struct light_info {
-	vec3  translation;
-	vec3  direction;
-	vec3  intensity;
+	vec3 translation;
+	vec3 direction;
+	vec3 intensity;
 	float spot_exponent;
 	float spot_cutoff;
-	int   type;
+	int type;
 };
 uniform light_info light[8];
 uniform int light_num;
@@ -42,10 +42,10 @@ struct light_color point(int i)
 
 	light_color.ambient = light[i].intensity * material.ka;
 	light_color.diffuse = light[i].intensity *
-		material.kd * max(dot(s, n), 0.0);
+	    material.kd * max(dot(s, n), 0.0);
 	light_color.specular = light[i].intensity *
-		material.ks * pow(max(dot(r, v), 0.0), material.shininess);
-	
+	    material.ks * pow(max(dot(r, v), 0.0), material.shininess);
+
 	return light_color;
 }
 
@@ -60,15 +60,14 @@ struct light_color spot(int i)
 	vec3 ambient = light[i].intensity * material.ka;
 	if (angle < light[i].spot_cutoff) {
 		float spot_factor = pow(dot(-s, light[i].direction),
-			light[i].spot_exponent);
+					light[i].spot_exponent);
 		vec3 v = normalize(-eye_position.xyz);
 		vec3 h = normalize(v + s);
 		light_color.ambient = ambient;
 		light_color.diffuse = spot_factor * light[i].intensity *
-			material.kd * max(dot(s, n), 0.0);
+		    material.kd * max(dot(s, n), 0.0);
 		light_color.specular = spot_factor * light[i].intensity *
-			material.ks * pow(max(dot(h, n), 0.0),
-			material.shininess);
+		    material.ks * pow(max(dot(h, n), 0.0), material.shininess);
 	} else {
 		light_color.ambient = ambient;
 	}
@@ -93,12 +92,12 @@ void main()
 		light_color.specular += tmp.specular;
 	}
 	ambient_and_diffuse = light_color.ambient + light_color.diffuse;
-	specular = light_color.specular; 
+	specular = light_color.specular;
 
-	intensity = light_color.ambient + light_color.diffuse + 
-		light_color.specular;
+	intensity = light_color.ambient + light_color.diffuse +
+	    light_color.specular;
 
 	vec4 tex_color = texture(tex, texcoord);
 	gl_FragColor = vec4(ambient_and_diffuse * tex_color.xyz + specular,
-		1.0);
+			    1.0);
 }

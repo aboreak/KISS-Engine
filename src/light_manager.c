@@ -7,11 +7,11 @@
 #include "program.h"
 #include "common.h"
 
-struct light_manager * light_manager_new()
+struct light_manager *light_manager_new()
 {
 	struct light_manager *light_mgr = NEW(struct light_manager);
-	
-	light_mgr->lights = array_new(struct light*);
+
+	light_mgr->lights = array_new(struct light *);
 
 	return light_mgr;
 }
@@ -34,40 +34,40 @@ unsigned light_manager_add_light(struct light_manager *light_mgr, unsigned type)
 	if (lights->len < MAX_LIGHTS)
 		array_push_back(lights, &light);
 
-	return lights->len-1;
+	return lights->len - 1;
 }
 
-struct light * light_manager_get_light(struct light_manager *light_mgr,
-	unsigned i)
+struct light *light_manager_get_light(struct light_manager *light_mgr,
+				      unsigned i)
 {
 	if (light_mgr->lights->len <= i)
 		return NULL;
 
-	return array_get(light_mgr->lights, i, struct light*);
+	return array_get(light_mgr->lights, i, struct light *);
 }
 
 void light_manager_draw(struct light_manager *light_mgr)
 {
-	struct array *	lights;
-	struct light *	light;
-	char 		str[32];
-	char 		id_str[4];
-	unsigned 	len;
-	GLint 		translation_uniform;
-	GLint 		direction_uniform;
-	GLint 		intensity_uniform;
-	GLint 		spot_exponent_uniform;
-	GLint 		spot_cutoff_uniform;
-	GLint		type_uniform;
+	struct array *lights;
+	struct light *light;
+	char str[32];
+	char id_str[4];
+	unsigned len;
+	GLint translation_uniform;
+	GLint direction_uniform;
+	GLint intensity_uniform;
+	GLint spot_exponent_uniform;
+	GLint spot_cutoff_uniform;
+	GLint type_uniform;
 
 	lights = light_mgr->lights;
 
 	unsigned i;
 	for (i = 0; i < lights->len; i++) {
-		light = array_get(lights, i, struct light*);
+		light = array_get(lights, i, struct light *);
 
 		strcpy(str, "light[");
-		sprintf(id_str, "%d", (int) i);
+		sprintf(id_str, "%d", (int)i);
 		strcat(str, id_str);
 		len = strlen(str);
 		strcat(str, "].translation");
@@ -92,16 +92,16 @@ void light_manager_draw(struct light_manager *light_mgr)
 		struct vec3 direction = light_get_direction(light);
 
 		glUniform3fv(translation_uniform, 1,
-			(GLfloat *) &light->translation);
-		glUniform3fv(direction_uniform, 1, (GLfloat *) &direction);
+			     (GLfloat *) & light->translation);
+		glUniform3fv(direction_uniform, 1, (GLfloat *) & direction);
 		glUniform3fv(intensity_uniform, 1,
-			(GLfloat *) &light->intensity);
+			     (GLfloat *) & light->intensity);
 		glUniform1f(spot_exponent_uniform, light->spot_exponent);
 		glUniform1f(spot_cutoff_uniform, light->spot_cutoff);
 		glUniform1i(type_uniform, light->type);
 
 		GLint light_num_uniform = glGetUniformLocation(g_program,
-			"light_num");
+							       "light_num");
 		glUniform1i(light_num_uniform, lights->len);
 	}
 }

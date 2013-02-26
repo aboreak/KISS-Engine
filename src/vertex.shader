@@ -44,7 +44,7 @@ void main()
 		vec3 specular = vec3(0.0);
 		if (sdotn > 0.0)
 			specular = light[i].ls * material.ks *
-				pow(max(dot(r, v), 0.0), material.shininess);
+			    pow(max(dot(r, v), 0.0), material.shininess);
 
 		light_intensity += (ambient + diffuse + specular);
 	}

@@ -16,13 +16,13 @@ struct array {
 
 #define array_len(x) ((x)->len)
 
-struct array * array_new_real(size_t esize);
+struct array *array_new_real(size_t esize);
 
 void array_delete(struct array **ary);
 
 inline void array_put(struct array *ary, size_t i, void *data);
 
-inline void * array_get_ptr(struct array *ary, size_t i);
+inline void *array_get_ptr(struct array *ary, size_t i);
 
 void array_push_back(struct array *ary, void *data);
 

@@ -9,16 +9,16 @@ struct light_manager {
 	struct array *lights;
 };
 
-struct light_manager * light_manager_new();
+struct light_manager *light_manager_new();
 
 void light_manager_delete(struct light_manager **light_mgr);
 
 unsigned light_manager_add_light(struct light_manager *light_mgr,
-	unsigned type);
+				 unsigned type);
 
 void light_manager_draw(struct light_manager *light_mgr);
 
-struct light * light_manager_get_light(struct light_manager *light_mgr,
-	unsigned i);
+struct light *light_manager_get_light(struct light_manager *light_mgr,
+				      unsigned i);
 
 #endif

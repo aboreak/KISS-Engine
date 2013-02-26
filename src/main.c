@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
 	struct renderer *renderer;
 	bool running;
-	
+
 	SDL_Init(SDL_INIT_EVERYTHING);
 	renderer = renderer_new(640, 480);
 	running = true;
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 			float y = event.motion.y;
 			float mx = mapf(x, 0, 640, -1, 1);
 			float my = mapf(y, 0, 480, -1, 1);
-			struct vec3 v = {mx, my, -1};
+			struct vec3 v = { mx, my, -1 };
 			renderer_draw_cube(renderer, v, 0.5, 0.5, 0.5);
 		}
 		renderer_display(renderer);

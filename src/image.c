@@ -9,7 +9,7 @@ enum {
 	IMAGE_BMP
 };
 
-static unsigned char get_image_type(FILE *file)
+static unsigned char get_image_type(FILE * file)
 {
 	if (fseek(file, -18, SEEK_END) == -1)
 		return 0;
@@ -43,7 +43,7 @@ static unsigned char get_image_type(FILE *file)
 	return 0;
 }
 
-static void load_tga(struct image *img, FILE *file)
+static void load_tga(struct image *img, FILE * file)
 {
 	img->width = 0;
 	img->height = 0;
@@ -82,17 +82,17 @@ static void load_tga(struct image *img, FILE *file)
 	unsigned int image_length = img->width * img->height;
 	if (img->format == BGRA_32) {
 		data_size = image_length * 4;
-		img->data = (unsigned char *) malloc(data_size);
+		img->data = (unsigned char *)malloc(data_size);
 		if (fread(img->data, 1, data_size, file) < data_size)
 			return;
 	} else if (img->format == BGR_24) {
 		data_size = image_length * 3;
-		img->data = (unsigned char *) malloc(data_size);
+		img->data = (unsigned char *)malloc(data_size);
 		if (fread(img->data, 1, data_size, file) < data_size)
 			return;
 	} else if (img->format == BW_8) {
 		data_size = image_length;
-		img->data = (unsigned char *) malloc(data_size);
+		img->data = (unsigned char *)malloc(data_size);
 		if (fread(img->data, 1, data_size, file) < data_size)
 			return;
 	}
@@ -101,7 +101,7 @@ static void load_tga(struct image *img, FILE *file)
 	fclose(file);
 }
 
-static void load_bmp(struct image *img, FILE *file)
+static void load_bmp(struct image *img, FILE * file)
 {
 	unsigned int data_pos = 0;
 	if (fseek(file, 0xA, SEEK_SET) == -1)
@@ -145,7 +145,7 @@ static void load_bmp(struct image *img, FILE *file)
 		return;
 	if (fread(&compression_method, 4, 1, file) < 1)
 		return;
-	
+
 	size_t data_size = 0;
 	if (fseek(file, 0x22, SEEK_SET) == -1)
 		return;
@@ -167,7 +167,7 @@ static void load_bmp(struct image *img, FILE *file)
 	fclose(file);
 }
 
-struct image * image_new(const char *filename)
+struct image *image_new(const char *filename)
 {
 	FILE *file = fopen(filename, "r");
 	if (!file) {
@@ -183,7 +183,7 @@ struct image * image_new(const char *filename)
 		load_tga(img, file);
 	else if (image_type == IMAGE_BMP)
 		load_bmp(img, file);
-	
+
 	return img;
 }
 
@@ -192,5 +192,4 @@ void image_delete(struct image **img)
 	free((*img)->data);
 	free(*img);
 	*img = NULL;
-} 
-
+}

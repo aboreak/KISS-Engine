@@ -5,7 +5,7 @@ struct texture {
 	unsigned id;
 };
 
-struct texture * texture_new(const char *filename);
+struct texture *texture_new(const char *filename);
 
 void texture_delete(struct texture **texture);
 

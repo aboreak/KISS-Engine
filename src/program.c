@@ -24,8 +24,7 @@ static GLuint create_program(struct array *shaders)
 		glGetProgramiv(tmp, GL_INFO_LOG_LENGTH, &info_log_length);
 
 		GLchar *info_log_str = (GLchar *) malloc(info_log_length + 1);
-		glGetProgramInfoLog(tmp, info_log_length, NULL,
-			info_log_str);
+		glGetProgramInfoLog(tmp, info_log_length, NULL, info_log_str);
 		fprintf(stderr, "Linker failure: %s\n", info_log_str);
 		free(info_log_str);
 	}
@@ -36,7 +35,7 @@ static GLuint create_program(struct array *shaders)
 	return tmp;
 }
 
-static GLuint create_shader(GLenum type, FILE *file)
+static GLuint create_shader(GLenum type, FILE * file)
 {
 	fseek(file, 0, SEEK_END);
 	size_t fsize = ftell(file);
@@ -50,7 +49,7 @@ static GLuint create_shader(GLenum type, FILE *file)
 	str[nread] = '\0';
 
 	GLuint shader = glCreateShader(type);
-	glShaderSource(shader, 1, (const GLchar **) &str, NULL);
+	glShaderSource(shader, 1, (const GLchar **)&str, NULL);
 	glCompileShader(shader);
 
 	GLint status;
@@ -61,9 +60,9 @@ static GLuint create_shader(GLenum type, FILE *file)
 
 		GLchar *info_log_str = (GLchar *) malloc(info_log_length + 1);
 		glGetShaderInfoLog(shader, info_log_length, NULL, info_log_str);
-		
+
 		const char *type_str = NULL;
-		switch(type) {
+		switch (type) {
 		case GL_VERTEX_SHADER:
 			type_str = "vertex";
 			break;
@@ -82,14 +81,14 @@ static GLuint create_shader(GLenum type, FILE *file)
 }
 
 void program_startup(const char *vshader_file_name,
-	const char *fshader_file_name)
+		     const char *fshader_file_name)
 {
 	FILE *vshader_file = fopen(vshader_file_name, "r");
 	if (!vshader_file) {
 		fprintf(stderr, "%s doesn't exist\n", vshader_file_name);
 		return;
 	}
-	
+
 	FILE *fshader_file = fopen(fshader_file_name, "r");
 	if (!fshader_file) {
 		fprintf(stderr, "%s doesn't exist\n", fshader_file_name);
@@ -99,7 +98,7 @@ void program_startup(const char *vshader_file_name,
 	struct array *shaders = array_new(GLuint);
 	if (!shaders) {
 		perror("Out of memory: Could not allocate space for struct"
-			"array");
+		       "array");
 		return;
 	}
 
@@ -109,7 +108,7 @@ void program_startup(const char *vshader_file_name,
 	array_push_back(shaders, &fshader);
 
 	g_program = create_program(shaders);
-	
+
 	unsigned i;
 	for (i = 0; i < shaders->len; i++)
 		glDeleteShader(array_get(shaders, i, GLuint));

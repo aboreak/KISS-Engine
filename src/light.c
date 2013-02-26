@@ -7,7 +7,7 @@
 #include "matrix.h"
 #include "common.h"
 
-struct light * light_new(enum LightType type)
+struct light *light_new(enum LightType type)
 {
 	struct light *light = NEW(struct light);
 
@@ -15,14 +15,14 @@ struct light * light_new(enum LightType type)
 	light_set_rotation(light, 0, 0, 0);
 	light_set_intensity(light, 1, 1, 1);
 	light_set_spot_exponent(light, 32);
-	light_set_spot_cutoff(light, PI/8);
+	light_set_spot_cutoff(light, PI / 8);
 	light_set_type(light, type);
 
 	return light;
 }
 
 inline void light_set_translation(struct light *light, float x, float y,
-	float z)
+				  float z)
 {
 	light->translation.x = x;
 	light->translation.y = y;
@@ -30,7 +30,7 @@ inline void light_set_translation(struct light *light, float x, float y,
 }
 
 inline void light_set_rotation(struct light *light, float pitch, float yaw,
-	float roll)
+			       float roll)
 {
 	light->rotation.x = pitch;
 	light->rotation.y = yaw;
@@ -67,7 +67,7 @@ inline void light_translate(struct light *light, float x, float y, float z)
 }
 
 inline void light_rotate(struct light *light, float pitch, float yaw,
-	float roll)
+			 float roll)
 {
 	light->rotation.x += pitch;
 	light->rotation.y += yaw;

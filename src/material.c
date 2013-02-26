@@ -4,7 +4,7 @@
 
 #define LINE_LENGTH 64
 
-struct material * material_new(const char *file_name)
+struct material *material_new(const char *file_name)
 {
 	FILE *file = fopen(file_name, "r");
 	if (!file) {

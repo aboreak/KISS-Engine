@@ -22,7 +22,7 @@ static void terminate(int use_exit3)
 static void output_error(int use_err, int err, int flush_stdout,
 			 const char *format, va_list ap)
 {
-	#define BUF_SIZE 500
+#define BUF_SIZE 500
 	char buf[BUF_SIZE];
 	char user_msg[BUF_SIZE];
 	char err_text[BUF_SIZE];
@@ -31,11 +31,11 @@ static void output_error(int use_err, int err, int flush_stdout,
 
 	if (use_err)
 		snprintf(err_text, BUF_SIZE, " [%s %s]",
-			(err > 0 && err <= MAX_ENAME) ?
-			ename[err] : "?UNKNOWN?", strerror(err));
+			 (err > 0 && err <= MAX_ENAME) ?
+			 ename[err] : "?UNKNOWN?", strerror(err));
 	else
 		snprintf(err_text, BUF_SIZE, ":");
-	
+
 	snprintf(buf, BUF_SIZE, "ERROR%s %s\n", err_text, user_msg);
 
 	if (flush_stdout)
